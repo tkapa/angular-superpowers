@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Company } from '../company';
 import { CompanyService } from '../company.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'fbc-company-list',
@@ -8,7 +9,7 @@ import { CompanyService } from '../company.service';
   styleUrl: './company-list.component.scss',
 })
 export class CompanyListComponent implements OnInit {
-  companies!: Company[];
+  companies$!: Observable<Company[]>;
 
   constructor(private readonly companyService: CompanyService) {}
 
@@ -17,6 +18,13 @@ export class CompanyListComponent implements OnInit {
   }
 
   getCompanies() {
-    this.companies = this.companyService.getCompanies();
+    this.companies$ = this.companyService.getCompanies();
+  }
+
+  deleteCompany(id: number) {
+    this.companyService.deleteCompany(id).subscribe(() => {
+      console.log('Company deleted successfully');
+      this.getCompanies();
+    });
   }
 }
