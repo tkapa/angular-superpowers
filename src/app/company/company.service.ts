@@ -12,6 +12,12 @@ export class CompanyService {
 
   constructor(private readonly httpClient: HttpClient) {}
 
+  addCompany(company: Company): Observable<Company> {
+    return this.httpClient
+      .post<Company>(`${this.API_BASE}/company`, company)
+      .pipe(catchError(this.errorHandler<Company>));
+  }
+
   getCompanies(): Observable<Company[]> {
     return this.httpClient
       .get<Company[]>(`${this.API_BASE}/company`)
